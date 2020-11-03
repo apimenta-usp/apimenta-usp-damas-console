@@ -11,7 +11,7 @@ namespace damas {
         public Cor jogadorAtual { get; private set; }
 
         public PartidaDeDamas() {
-            tab = new Tabuleiro(8, 8);
+            tab = new Tabuleiro(tab.linhas, tab.colunas);
             turno = 1;
             jogadorAtual = Cor.Branca;
         }

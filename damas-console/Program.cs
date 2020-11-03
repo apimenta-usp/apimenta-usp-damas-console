@@ -8,6 +8,9 @@ namespace damas_console {
 
             Tela.imprimirTelaInicial();
 
+            Console.Clear();
+            Tabuleiro tab = new Tabuleiro(8, 8);
+            Tela.imprimirTabuleiro(tab);
 
 
             Console.WriteLine();
