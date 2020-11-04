@@ -5,7 +5,6 @@ using tabuleiro;
 
 namespace damas {
     class PartidaDeDamas {
-
         public Tabuleiro tab { get; private set; }
         public int turno { get; private set; }
         public Cor jogadorAtual { get; private set; }

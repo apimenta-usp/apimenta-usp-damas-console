@@ -5,7 +5,6 @@ using damas;
 
 namespace damas_console {
     class Tela {
-
         public static void imprimirTelaInicial() {
             Console.Clear();
             ConsoleColor corPadrao = Console.ForegroundColor;
@@ -25,8 +24,8 @@ namespace damas_console {
             Console.WriteLine("#                       #");
             Console.WriteLine("#  #  #  #  #  #  #  #  #");
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Criado e projetado por:");
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Adriano Pimenta");
             Console.ForegroundColor = corPadrao;
             Console.WriteLine();
