@@ -10,19 +10,17 @@ namespace damas_console {
                 Tela.imprimirTelaInicial();
 
                 //Console.Clear();
-                int escolha;
+                int tamanho;
 
                 do {
                     Console.Clear();
                     Console.Write("\nEscolha o tamanho do tabuleiro (6/8/10): ");
-                    int.TryParse(Console.ReadLine(), out escolha);
-                    //escolha = int.Console.ReadLine();
-
-                } while (escolha != 6 && escolha != 8 && escolha != 10);
-
+                    int.TryParse(Console.ReadLine(), out tamanho);
+                } while (tamanho != 6 && tamanho != 8 && tamanho != 10);
                 Console.Clear();
-                Tabuleiro tab = new Tabuleiro(escolha, escolha);
-                Tela.imprimirTabuleiro(tab);
+                PartidaDeDamas partida = new PartidaDeDamas(tamanho);               
+
+                Tela.imprimirTabuleiro(partida.tab);
 
             } catch (TabuleiroException e) {
                 Console.WriteLine(e.Message);

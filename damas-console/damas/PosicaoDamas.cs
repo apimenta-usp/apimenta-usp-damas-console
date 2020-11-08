@@ -2,7 +2,6 @@
 
 namespace damas {
     class PosicaoDamas {
-
         public char coluna { get; set; }
         public int linha { get; set; }
 
@@ -11,8 +10,10 @@ namespace damas {
             this.linha = linha;
         }
 
+        //public Posicao toPosicao(int tamanho) {
         public Posicao toPosicao() {
             return new Posicao(8 - linha, coluna - 'a');
+            //return new Posicao(tamanho - linha, coluna - 'a');
         }
 
         public override string ToString() {
