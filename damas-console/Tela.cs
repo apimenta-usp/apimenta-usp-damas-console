@@ -64,6 +64,28 @@ namespace damas_console {
             imprimirLetra(tab);
         }
 
+        public static void imprimirTabuleiro(Tabuleiro tab, bool[,] posicoesPossiveis) {
+
+            ConsoleColor fundoOriginal = Console.BackgroundColor;
+            ConsoleColor fundoAlterado = ConsoleColor.DarkGray;
+
+            for (int i = 0; i < tab.linhas; i++) {
+                imprimirNumero(tab, i);
+                for (int j = 0; j < tab.colunas; j++) {
+                    if (posicoesPossiveis[i, j]) {
+                        Console.BackgroundColor = fundoAlterado;
+                    } else {
+                        Console.BackgroundColor = fundoOriginal;
+                    }
+                    imprimirPeca(tab.peca(i, j), i, j);
+                    Console.BackgroundColor = fundoOriginal;
+                }
+                Console.WriteLine();
+                Console.BackgroundColor = fundoOriginal;
+            }
+            imprimirLetra(tab);
+        }
+
         private static bool validarLinha(Tabuleiro tab, int linha) {
             for (int i = 1; i <= tab.linhas; i++) {
                 if (linha == i) {

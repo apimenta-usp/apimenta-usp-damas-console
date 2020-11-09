@@ -32,6 +32,18 @@ namespace damas {
             //return pecaCapturada;
         }
 
+        public void validarPosicaoDeOrigem(Posicao pos) {
+            if (tab.peca(pos) == null) {
+                throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
+            }
+            if (jogadorAtual != tab.peca(pos).cor) {
+                throw new TabuleiroException("A peça de origem escolhida não é sua!");
+            }
+            if (!tab.peca(pos).existemMovimentosPossiveis()) {
+                throw new TabuleiroException("Não há movimentos possíveis para a peça de origem escolhida!");
+            }
+        }
+
         private void colocarPecas(int tamanho) {
             if(tamanho == 6) {
             //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('a', 1).toPosicao(tamanho));
@@ -40,6 +52,7 @@ namespace damas {
             } else if (tamanho == 8) { 
             tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('a', 1).toPosicao());
             tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('f', 2).toPosicao());
+            tab.colocarPeca(new Dama(tab, Cor.Branca), new PosicaoDamas('f', 6).toPosicao());
             tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('b', 2).toPosicao());
             tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('b', 8).toPosicao());
             tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('a', 7).toPosicao());

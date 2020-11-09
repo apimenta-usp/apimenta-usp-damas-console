@@ -28,6 +28,17 @@ namespace damas_console {
                         Console.WriteLine();
                         Console.Write("Origem: ");
                         Posicao origem = Tela.lerPosicaoDamas(partida.tab).toPosicao();
+                        partida.validarPosicaoDeOrigem(origem);
+
+                        bool[,] posicoesPossiveis = partida.tab.peca(origem).movimentosPossiveis();
+
+                        Console.Clear();
+                        Tela.imprimirTabuleiro(partida.tab, posicoesPossiveis);
+
+                        Console.WriteLine();
+                        Console.Write("Destino: ");
+                        Posicao destino = Tela.lerPosicaoDamas(partida.tab).toPosicao();
+
                     } catch (TabuleiroException e) {
                         Console.WriteLine(e.Message);
                         Console.ReadKey(true);
