@@ -18,17 +18,34 @@ namespace damas_console {
                     int.TryParse(Console.ReadLine(), out tamanho);
                 } while (tamanho != 6 && tamanho != 8 && tamanho != 10);
                 Console.Clear();
-                PartidaDeDamas partida = new PartidaDeDamas(tamanho);               
+                PartidaDeDamas partida = new PartidaDeDamas(tamanho);
 
+                while (!partida.terminada) {
+
+                    try {
+                        Console.Clear();
+                        Tela.imprimirTabuleiro(partida.tab);
+                        Console.WriteLine();
+                        Console.Write("Origem: ");
+                        Posicao origem = Tela.lerPosicaoDamas(partida.tab).toPosicao();
+                    } catch (TabuleiroException e) {
+                        Console.WriteLine(e.Message);
+                        Console.ReadKey(true);
+                    } catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        //Console.WriteLine(e.StackTrace);
+                        Console.ReadKey(true);
+                    }
+                }
+                Console.Clear();
                 Tela.imprimirTabuleiro(partida.tab);
-
             } catch (TabuleiroException e) {
                 Console.WriteLine(e.Message);
-            }
 
-            Console.WriteLine();
-            Console.WriteLine("Pressione qualquer tecla para sair...");
-            Console.ReadKey(true);
+                Console.WriteLine();
+                Console.WriteLine("Pressione qualquer tecla para sair...");
+                Console.ReadKey(true);
+            }
         }
     }
 }

@@ -5,6 +5,8 @@ using damas;
 
 namespace damas_console {
     class Tela {
+        public Tabuleiro tab { get; private set; }
+
         public static void imprimirTelaInicial() {
             Console.Clear();
             ConsoleColor corPadrao = Console.ForegroundColor;
@@ -60,6 +62,46 @@ namespace damas_console {
                 Console.WriteLine();
             }
             imprimirLetra(tab);
+        }
+
+        private static bool validarLinha(Tabuleiro tab, int linha) {
+            for (int i = 1; i <= tab.linhas; i++) {
+                if (linha == i) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool validarColuna(Tabuleiro tab, char coluna) {
+            for (int i = 0; i < tab.colunas; i++) {
+                if (coluna == 'a' + i) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static PosicaoDamas lerPosicaoDamas(Tabuleiro tab) {
+            string leitura = Console.ReadLine();
+            string s = leitura.Trim();
+            if (s.Length != 2) {
+                throw new TabuleiroException("Digitação incorreta!");
+            }
+            char coluna = s[0];
+            int linha;
+            if (!(int.TryParse((s[1] + ""), out linha))) {
+                throw new TabuleiroException("Digitação incorreta!");
+            } else {
+                linha = int.Parse(s[1] + "");
+                /* Na linha acima, para o programa entender o Parse do char na posição 1, foi 
+                   preciso acrescentar as aspas para fazer uma conversão explícita para string. */
+            }
+            if (validarLinha(tab, linha) && validarColuna(tab, coluna)) {
+                return new PosicaoDamas(coluna, linha);
+            } else {
+                throw new TabuleiroException("Digitação incorreta!");
+            }
         }
 
         public static void imprimirPeca(Peca peca, int i, int j) {

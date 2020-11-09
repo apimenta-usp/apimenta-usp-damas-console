@@ -6,8 +6,9 @@ namespace damas {
         public Tabuleiro tab { get; private set; }
         public int turno { get; private set; }
         public Cor jogadorAtual { get; private set; }
+        public bool terminada { get; private set; }
         //public int tamanho { get; private set; }
-
+        
         public PartidaDeDamas(int tamanho) {
             //this.tamanho = tamanho;
             //tab = new Tabuleiro(this.tamanho, this.tamanho);
