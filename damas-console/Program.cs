@@ -25,6 +25,7 @@ namespace damas_console {
                     try {
                         Console.Clear();
                         Tela.imprimirTabuleiro(partida.tab);
+
                         Console.WriteLine();
                         Console.Write("Origem: ");
                         Posicao origem = Tela.lerPosicaoDamas(partida.tab).toPosicao();
@@ -38,7 +39,9 @@ namespace damas_console {
                         Console.WriteLine();
                         Console.Write("Destino: ");
                         Posicao destino = Tela.lerPosicaoDamas(partida.tab).toPosicao();
+                        partida.validarPosicaoDeDestino(origem, destino);
 
+                        partida.realizarJogada(origem, destino);
                     } catch (TabuleiroException e) {
                         Console.WriteLine(e.Message);
                         Console.ReadKey(true);
