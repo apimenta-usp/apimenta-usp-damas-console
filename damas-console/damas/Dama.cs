@@ -9,7 +9,12 @@ namespace damas {
             return "D";
         }
 
-        private bool podeMover(Posicao pos) {
+        private bool existeInimigo(Posicao pos) {
+            Peca p = tab.peca(pos);
+            return p != null && p.cor != cor;
+        }
+
+        private bool casaLivre(Posicao pos) {
             Peca p = tab.peca(pos);
             return p == null;
         }
@@ -23,36 +28,92 @@ namespace damas {
 
             Posicao pos = new Posicao(0, 0);
 
-            // Testando casas nordeste
+            // Testando casas nordeste livres
             pos.definirValores(posicao.linha - 1, posicao.coluna + 1);
-            while (tab.posicaoValida(pos) && podeMover(pos)) {
+            while (tab.posicaoValida(pos) && casaLivre(pos)) {
                 mat[pos.linha, pos.coluna] = true;
                 pos.linha--;
                 pos.coluna++;
             }
 
-            // Testando casas sudeste
+            // Testando casas nordeste após peça adversária
+            for (int i = 1; i <= tab.linhas; i++) {
+                pos.definirValores(posicao.linha - i, posicao.coluna + i);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha - (i + 1), posicao.coluna + (i + 1));
+                    while (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                        pos.linha--;
+                        pos.coluna++;
+                    }
+                    break;
+                }
+            }
+
+            // Testando casas sudeste livres
             pos.definirValores(posicao.linha + 1, posicao.coluna + 1);
-            while (tab.posicaoValida(pos) && podeMover(pos)) {
+            while (tab.posicaoValida(pos) && casaLivre(pos)) {
                 mat[pos.linha, pos.coluna] = true;
                 pos.linha++;
                 pos.coluna++;
             }
 
-            // Testando casas sudoeste
+            // Testando casas sudeste após peça adversária
+            for (int i = 1; i <= tab.linhas; i++) {
+                pos.definirValores(posicao.linha + i, posicao.coluna + i);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha + (i + 1), posicao.coluna + (i + 1));
+                    while (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                        pos.linha++;
+                        pos.coluna++;
+                    }
+                    break;
+                }
+            }
+
+            // Testando casas sudoeste livres
             pos.definirValores(posicao.linha + 1, posicao.coluna - 1);
-            while (tab.posicaoValida(pos) && podeMover(pos)) {
+            while (tab.posicaoValida(pos) && casaLivre(pos)) {
                 mat[pos.linha, pos.coluna] = true;
                 pos.linha++;
                 pos.coluna--;
             }
 
-            // Testando casas noroeste
+            // Testando casas sudoeste após peça adversária
+            for (int i = 1; i <= tab.linhas; i++) {
+                pos.definirValores(posicao.linha + i, posicao.coluna - i);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha + (i + 1), posicao.coluna - (i + 1));
+                    while (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                        pos.linha++;
+                        pos.coluna--;
+                    }
+                    break;
+                }
+            }
+
+            // Testando casas noroeste livres
             pos.definirValores(posicao.linha - 1, posicao.coluna - 1);
-            while (tab.posicaoValida(pos) && podeMover(pos)) {
+            while (tab.posicaoValida(pos) && casaLivre(pos)) {
                 mat[pos.linha, pos.coluna] = true;
                 pos.linha--;
                 pos.coluna--;
+            }
+
+            // Testando casas noroeste após peça adversária
+            for (int i = 1; i <= tab.linhas; i++) {
+                pos.definirValores(posicao.linha - i, posicao.coluna - i);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha - (i + 1), posicao.coluna - (i + 1));
+                    while (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                        pos.linha--;
+                        pos.coluna--;
+                    }
+                    break;
+                }
             }
 
             return mat;

@@ -5,7 +5,7 @@ using damas;
 
 namespace damas_console {
     class Tela {
-        public Tabuleiro tab { get; private set; }
+        //public Tabuleiro tab { get; private set; }
 
         public static void imprimirTelaInicial() {
             Console.Clear();

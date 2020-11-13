@@ -9,7 +9,12 @@ namespace damas {
             return "C";
         }
 
-        private bool podeMover(Posicao pos) {
+        private bool existeInimigo(Posicao pos) {
+            Peca p = tab.peca(pos);
+            return p != null && p.cor != cor;
+        }
+
+        private bool casaLivre(Posicao pos) {
             Peca p = tab.peca(pos);
             return p == null;
         }
@@ -24,29 +29,101 @@ namespace damas {
             Posicao pos = new Posicao(0, 0);
 
             if (cor == Cor.Branca) {
-                // Testando casa nordeste
+                // Testando casa nordeste livre
                 pos.definirValores(posicao.linha - 1, posicao.coluna + 1);
-                if (tab.posicaoValida(pos) && podeMover(pos)) {
+                if (tab.posicaoValida(pos) && casaLivre(pos)) {
                     mat[pos.linha, pos.coluna] = true;
                 }
 
-                // Testando casa noroeste
+                // Testando casa nordeste após peça adversária
+                pos.definirValores(posicao.linha - 1, posicao.coluna + 1);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha - 2, posicao.coluna + 2);
+                    if (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                    }
+                }
+
+                // Testando casa noroeste livre
                 pos.definirValores(posicao.linha - 1, posicao.coluna - 1);
-                if (tab.posicaoValida(pos) && podeMover(pos)) {
+                if (tab.posicaoValida(pos) && casaLivre(pos)) {
                     mat[pos.linha, pos.coluna] = true;
+                }
+
+                // Testando casa noroeste após peça adversária
+                pos.definirValores(posicao.linha - 1, posicao.coluna - 1);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha - 2, posicao.coluna - 2);
+                    if (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                    }
+                }
+
+                // Testando casa sudeste após peça adversária
+                pos.definirValores(posicao.linha + 1, posicao.coluna + 1);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha + 2, posicao.coluna + 2);
+                    if (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                    }
+                }
+
+                // Testando casa sudoeste após peça adversária
+                pos.definirValores(posicao.linha + 1, posicao.coluna - 1);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha + 2, posicao.coluna - 2);
+                    if (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                    }
                 }
 
             } else {
-                // Testando casa sudeste
+                // Testando casa sudeste livre
                 pos.definirValores(posicao.linha + 1, posicao.coluna + 1);
-                if (tab.posicaoValida(pos) && podeMover(pos)) {
+                if (tab.posicaoValida(pos) && casaLivre(pos)) {
                     mat[pos.linha, pos.coluna] = true;
                 }
 
-                // Testando casa sudoeste
+                // Testando casa sudeste após peça adversária
+                pos.definirValores(posicao.linha + 1, posicao.coluna + 1);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha + 2, posicao.coluna + 2);
+                    if (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                    }
+                }
+
+                // Testando casa sudoeste livre
                 pos.definirValores(posicao.linha + 1, posicao.coluna - 1);
-                if (tab.posicaoValida(pos) && podeMover(pos)) {
+                if (tab.posicaoValida(pos) && casaLivre(pos)) {
                     mat[pos.linha, pos.coluna] = true;
+                }
+
+                // Testando casa sudoeste após peça adversária
+                pos.definirValores(posicao.linha + 1, posicao.coluna - 1);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha + 2, posicao.coluna - 2);
+                    if (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                    }
+                }
+
+                // Testando casa nordeste após peça adversária
+                pos.definirValores(posicao.linha - 1, posicao.coluna + 1);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha - 2, posicao.coluna + 2);
+                    if (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                    }
+                }
+
+                // Testando casa noroeste após peça adversária
+                pos.definirValores(posicao.linha - 1, posicao.coluna - 1);
+                if (tab.posicaoValida(pos) && existeInimigo(pos)) {
+                    pos.definirValores(posicao.linha - 2, posicao.coluna - 2);
+                    if (tab.posicaoValida(pos) && casaLivre(pos)) {
+                        mat[pos.linha, pos.coluna] = true;
+                    }
                 }
             }
 

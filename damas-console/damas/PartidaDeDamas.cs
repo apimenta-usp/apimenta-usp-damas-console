@@ -69,25 +69,61 @@ namespace damas {
         }
 
         private void colocarPecas(int tamanho) {
-            if(tamanho == 6) {
-            //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('a', 1).toPosicao(tamanho));
-            //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('f', 2).toPosicao(tamanho));
+            switch (tamanho) {
+                case 6:
+                    //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('a', 1).toPosicao(tamanho));
+                    //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('f', 2).toPosicao(tamanho));
+                    break;
+                case 8:
+                    //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('a', 1).toPosicao());
+                    //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('e', 3).toPosicao());
+                    //tab.colocarPeca(new Dama(tab, Cor.Branca), new PosicaoDamas('f', 6).toPosicao());
+                    //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('b', 2).toPosicao());
+                    //tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('b', 8).toPosicao());
+                    //tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('a', 7).toPosicao());
+                    //tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('d', 2).toPosicao());
+                    //tab.colocarPeca(new Dama(tab, Cor.Preta), new PosicaoDamas('d', 4).toPosicao());
 
-            } else if (tamanho == 8) { 
-            tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('a', 1).toPosicao());
-            tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('f', 2).toPosicao());
-            tab.colocarPeca(new Dama(tab, Cor.Branca), new PosicaoDamas('f', 6).toPosicao());
-            tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('b', 2).toPosicao());
-            tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('b', 8).toPosicao());
-            tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('a', 7).toPosicao());
-            tab.colocarPeca(new Dama(tab, Cor.Preta), new PosicaoDamas('d', 4).toPosicao());
-            } else if(tamanho == 10) {
-            //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('a', 1).toPosicao(tamanho));
-            //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('f', 2).toPosicao(tamanho));
-
-            } else {
-                throw new TabuleiroException("Tamanho inválido!");
+                    tab.colocarPeca(new Dama(tab, Cor.Branca), new PosicaoDamas('d', 4).toPosicao());
+                    tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('b', 2).toPosicao());
+                    tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('b', 6).toPosicao());
+                    tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('c', 3).toPosicao());
+                    tab.colocarPeca(new Dama(tab, Cor.Preta), new PosicaoDamas('g', 1).toPosicao());
+                    tab.colocarPeca(new Dama(tab, Cor.Preta), new PosicaoDamas('g', 7).toPosicao());
+                    break;
+                case 10:
+                    //tab.colocarPeca(new Dama(tab, Cor.Branca), new PosicaoDamas('e', 5).toPosicao());
+                    //tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('b', 8).toPosicao());
+                    //tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('d', 4).toPosicao());
+                    //tab.colocarPeca(new Dama(tab, Cor.Preta), new PosicaoDamas('g', 7).toPosicao());
+                    //tab.colocarPeca(new Dama(tab, Cor.Preta), new PosicaoDamas('i', 1).toPosicao());
+                    //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('a', 1).toPosicao(tamanho));
+                    //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('f', 2).toPosicao(tamanho));
+                    break;
+                default:
+                    throw new TabuleiroException("Tamanho inválido!");
             }
+
+            //if (tamanho == 6) {
+            ////tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('a', 1).toPosicao(tamanho));
+            ////tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('f', 2).toPosicao(tamanho));
+
+            //} else if (tamanho == 8) { 
+            //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('a', 1).toPosicao());
+            //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('e', 3).toPosicao());
+            //tab.colocarPeca(new Dama(tab, Cor.Branca), new PosicaoDamas('f', 6).toPosicao());
+            //tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('b', 2).toPosicao());
+            //tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('b', 8).toPosicao());
+            //tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('a', 7).toPosicao());
+            //tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('d', 2).toPosicao());
+            //tab.colocarPeca(new Dama(tab, Cor.Preta), new PosicaoDamas('d', 4).toPosicao());
+            //} else if(tamanho == 10) {
+            ////tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('a', 1).toPosicao(tamanho));
+            ////tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('f', 2).toPosicao(tamanho));
+
+            //} else {
+            //    throw new TabuleiroException("Tamanho inválido!");
+            //}
         }
     }
 }
