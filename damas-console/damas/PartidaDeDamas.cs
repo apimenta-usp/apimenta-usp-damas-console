@@ -7,8 +7,10 @@ namespace damas {
         public int turno { get; private set; }
         public Cor jogadorAtual { get; private set; }
         public bool terminada { get; private set; }
+        private HashSet<Peca> pecas;
+        private HashSet<Peca> capturadas;
         //public int tamanho { get; private set; }
-        
+
         public PartidaDeDamas(int tamanho) {
             //this.tamanho = tamanho;
             //tab = new Tabuleiro(this.tamanho, this.tamanho);
@@ -16,20 +18,22 @@ namespace damas {
             //tab = new Tabuleiro(8, 8);
             turno = 1;
             jogadorAtual = Cor.Branca;
+            pecas = new HashSet<Peca>();
+            capturadas = new HashSet<Peca>();
             //colocarPecas(this.tamanho);
             colocarPecas(tamanho);
         }
 
-        public void executarMovimento(Posicao origem, Posicao destino) {
+        public Peca executarMovimento(Posicao origem, Posicao destino) {
             Peca p = tab.retirarPeca(origem);
             p.incrementarQteMovimentos();
-            //Peca pecaCapturada = tab.retirarPeca(destino);
+            Peca pecaCapturada = tab.retirarPeca(destino);
             tab.colocarPeca(p, destino);
-            //if (pecaCapturada != null) {
-            //    capturadas.Add(pecaCapturada);
-            //}
+            if (pecaCapturada != null) {
+                capturadas.Add(pecaCapturada);
+            }
 
-            //return pecaCapturada;
+            return pecaCapturada;
         }
 
         public void realizarJogada(Posicao origem, Posicao destino) {
@@ -68,6 +72,32 @@ namespace damas {
             }
         }
 
+        public HashSet<Peca> pecasCapturadas(Cor cor) {
+            HashSet<Peca> aux = new HashSet<Peca>();
+            foreach (Peca x in capturadas) {
+                if (x.cor == cor) {
+                    aux.Add(x);
+                }
+            }
+            return aux;
+        }
+
+        public HashSet<Peca> pecasEmJogo(Cor cor) {
+            HashSet<Peca> aux = new HashSet<Peca>();
+            foreach (Peca x in pecas) {
+                if (x.cor == cor) {
+                    aux.Add(x);
+                }
+            }
+            aux.ExceptWith(pecasCapturadas(cor));
+            return aux;
+        }
+
+        public void colocarNovaPeca(Peca peca, char coluna, int linha) {
+            tab.colocarPeca(peca, new PosicaoDamas(coluna, linha).toPosicao());
+            pecas.Add(peca);
+        }
+
         private void colocarPecas(int tamanho) {
             switch (tamanho) {
                 case 6:
@@ -84,12 +114,12 @@ namespace damas {
                     //tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('d', 2).toPosicao());
                     //tab.colocarPeca(new Dama(tab, Cor.Preta), new PosicaoDamas('d', 4).toPosicao());
 
-                    tab.colocarPeca(new Dama(tab, Cor.Branca), new PosicaoDamas('d', 4).toPosicao());
-                    tab.colocarPeca(new Comum(tab, Cor.Branca), new PosicaoDamas('b', 2).toPosicao());
-                    tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('b', 6).toPosicao());
-                    tab.colocarPeca(new Comum(tab, Cor.Preta), new PosicaoDamas('c', 3).toPosicao());
-                    tab.colocarPeca(new Dama(tab, Cor.Preta), new PosicaoDamas('g', 1).toPosicao());
-                    tab.colocarPeca(new Dama(tab, Cor.Preta), new PosicaoDamas('g', 7).toPosicao());
+                    colocarNovaPeca(new Dama(tab, Cor.Branca), 'd', 4);
+                    colocarNovaPeca(new Comum(tab, Cor.Branca), 'b', 2);
+                    colocarNovaPeca(new Comum(tab, Cor.Preta), 'b', 6);
+                    colocarNovaPeca(new Comum(tab, Cor.Preta), 'c', 3);
+                    colocarNovaPeca(new Dama(tab, Cor.Preta), 'g', 1);
+                    colocarNovaPeca(new Dama(tab, Cor.Preta), 'g', 7);
                     break;
                 case 10:
                     //tab.colocarPeca(new Dama(tab, Cor.Branca), new PosicaoDamas('e', 5).toPosicao());

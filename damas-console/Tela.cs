@@ -52,6 +52,75 @@ namespace damas_console {
             Console.ReadKey(true);
         }
 
+        public static void imprimirPartida(PartidaDeDamas partida) {
+            Tela.imprimirTabuleiro(partida.tab);
+            Console.WriteLine();
+            imprimirPecasCapturadas(partida);
+            Console.WriteLine();
+            Console.WriteLine("Turno: " + partida.turno);
+            if (!partida.terminada) {
+                Console.Write("Aguardando jogada: ");
+                if (partida.jogadorAtual == Cor.Preta) {
+                    ConsoleColor corPadrao = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(partida.jogadorAtual);
+                    Console.ForegroundColor = corPadrao;
+                } else {
+                    Console.WriteLine(partida.jogadorAtual);
+                }
+                //if (partida.promocaoPecaComum) {
+                //    Console.WriteLine("\nPeca promovida a Dama!");
+                //}
+            } else {
+                Console.WriteLine("\nFIM DA PARTIDA!");
+                Console.Write("Vencedor: ");
+                if (partida.jogadorAtual == Cor.Preta) {
+                    ConsoleColor corPadrao = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(partida.jogadorAtual);
+                    Console.ForegroundColor = corPadrao;
+                } else {
+                    Console.WriteLine(partida.jogadorAtual);
+                }
+            }
+        }
+
+        public static void imprimirPecasCapturadas(PartidaDeDamas partida) {
+            ConsoleColor corPadrao = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Peças capturadas:");
+            Console.ForegroundColor = corPadrao;
+            Console.Write("Brancas: ");
+            imprimirConjunto(partida.pecasCapturadas(Cor.Branca));
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Pretas: ");
+            imprimirConjunto(partida.pecasCapturadas(Cor.Preta));
+            Console.ForegroundColor = corPadrao;
+            Console.WriteLine();
+        }
+
+        public static void imprimirConjunto(HashSet<Peca> conjunto) {
+            int comum = 0;
+            int dama = 0;
+            Console.Write("[ ");
+            foreach (Peca p in conjunto) {
+                if (p is Comum) {
+                    comum++;
+                }
+                if (p is Dama) {
+                    dama++;
+                }
+            }
+            if (comum > 0) {
+                Console.Write(comum + "C ");
+            } else Console.Write("");
+            if (dama > 0) {
+                Console.Write(dama + "D ");
+            } else Console.Write("");
+            Console.Write("]");
+        }
+
         public static void imprimirTabuleiro(Tabuleiro tab) {
 
             for (int i = 0; i < tab.linhas; i++) {
