@@ -82,6 +82,7 @@ namespace damas_console {
                 } else {
                     Console.WriteLine(partida.jogadorAtual);
                 }
+                Console.WriteLine();
             }
         }
 

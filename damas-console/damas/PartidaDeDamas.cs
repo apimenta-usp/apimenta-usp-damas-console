@@ -19,6 +19,7 @@ namespace damas {
             //tab = new Tabuleiro(8, 8);
             turno = 1;
             jogadorAtual = Cor.Branca;
+            terminada = false;
             pecas = new HashSet<Peca>();
             capturadas = new HashSet<Peca>();
             //colocarPecas(this.tamanho);
@@ -43,24 +44,33 @@ namespace damas {
 
             //Peca p = tab.peca(destino);
 
-            turno++;
-            mudarJogador();
+            HashSet<Peca> pecasAdversarias = pecasEmJogo(corAdversaria(jogadorAtual));
+            if (pecasAdversarias.Count == 0) {
+                terminada = true;
+            } else {
+                turno++;
+                mudarJogador();
+            }
         }
 
         private bool existeAdversario(Posicao pos) {
             Peca p = tab.peca(pos);
             return p != null && p.cor != jogadorAtual;
         }
-        
+
         private Peca capturarPeca(Posicao origem, Posicao destino) {
             int diferencaLinha = destino.linha - origem.linha;
             int diferencaColuna = destino.coluna - origem.coluna;
-            Posicao pos = new Posicao(0, 0);
+            if (Math.Abs(diferencaLinha) != Math.Abs(diferencaColuna)) {
+                return null;
+            }
 
             if (diferencaLinha == 0 || Math.Abs(diferencaLinha) == 1 ||
                 diferencaColuna == 0 || Math.Abs(diferencaColuna) == 1) {
                 return null;
             }
+
+            Posicao pos = new Posicao(0, 0);
 
             if (diferencaLinha < -1 && diferencaColuna > 1) {
                 for (int i = 1; i < Math.Abs(diferencaLinha); i++) {
@@ -162,6 +172,14 @@ namespace damas {
             }
             aux.ExceptWith(pecasCapturadas(cor));
             return aux;
+        }
+
+        private Cor corAdversaria(Cor cor) {
+            if (cor == Cor.Branca) {
+                return Cor.Preta;
+            } else {
+                return Cor.Branca;
+            }
         }
 
         public void colocarNovaPeca(Peca peca, char coluna, int linha) {
