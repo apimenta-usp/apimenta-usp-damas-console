@@ -56,6 +56,9 @@ namespace damas_console {
             Tela.imprimirTabuleiro(partida.tab);
             Console.WriteLine();
             imprimirPecasCapturadas(partida);
+            if (partida.promocaoComum) {
+                Console.WriteLine("\nPeça promovida a Dama!");
+            }
             Console.WriteLine();
             Console.WriteLine("Turno: " + partida.turno);
             if (!partida.terminada) {
@@ -68,9 +71,6 @@ namespace damas_console {
                 } else {
                     Console.WriteLine(partida.jogadorAtual);
                 }
-                //if (partida.promocaoPecaComum) {
-                //    Console.WriteLine("\nPeca promovida a Dama!");
-                //}
             } else {
                 Console.WriteLine("\nFIM DA PARTIDA!");
                 Console.Write("Vencedor: ");

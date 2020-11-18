@@ -10,6 +10,7 @@ namespace damas {
         public bool terminada { get; private set; }
         private HashSet<Peca> pecas;
         private HashSet<Peca> capturadas;
+        public bool promocaoComum { get; private set; }
         //public int tamanho { get; private set; }
 
         public PartidaDeDamas(int tamanho) {
@@ -20,6 +21,7 @@ namespace damas {
             turno = 1;
             jogadorAtual = Cor.Branca;
             terminada = false;
+            promocaoComum = false;
             pecas = new HashSet<Peca>();
             capturadas = new HashSet<Peca>();
             //colocarPecas(this.tamanho);
@@ -42,7 +44,19 @@ namespace damas {
             //executarMovimento(origem, destino);
             Peca pecaCapturada = executarMovimento(origem, destino);
 
-            //Peca p = tab.peca(destino);
+            Peca p = tab.peca(destino);
+
+            // #jogadaespecial promoção
+            if (p is Comum) {
+                if (p.cor == Cor.Branca && destino.linha == 0 || p.cor == Cor.Preta && destino.linha == (tab.linhas - 1)) {
+                    p = tab.retirarPeca(destino);
+                    pecas.Remove(p);
+                    Peca dama = new Dama(tab, p.cor);
+                    tab.colocarPeca(dama, destino);
+                    pecas.Add(dama);
+                    promocaoComum = true;
+                } else promocaoComum = false;
+            } else promocaoComum = false;
 
             HashSet<Peca> pecasAdversarias = pecasEmJogo(corAdversaria(jogadorAtual));
             if (pecasAdversarias.Count == 0) {
