@@ -1,4 +1,6 @@
-﻿namespace tabuleiro {
+﻿using System;
+
+namespace tabuleiro {
     abstract class Peca {
         public Posicao posicao { get; set; }
         public Cor cor { get; protected set; }
@@ -27,6 +29,16 @@
             }
             return false;
         }
+
+        protected bool existeInimigo(Posicao pos) {
+            Peca p = tab.peca(pos);
+            return p != null && p.cor != cor;
+        }
+
+        protected bool casaLivre(Posicao pos) {
+            Peca p = tab.peca(pos);
+            return p == null;
+        }        
 
         public bool movimentoPossivel(Posicao pos) {
             return movimentosPossiveis()[pos.linha, pos.coluna];

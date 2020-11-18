@@ -47,12 +47,12 @@ namespace damas_console {
                         Console.ReadKey(true);
                     } catch (Exception e) {
                         Console.WriteLine(e.Message);
-                        //Console.WriteLine(e.StackTrace);
+                        Console.WriteLine(e.StackTrace);
                         Console.ReadKey(true);
                     }
                 }
                 Console.Clear();
-                Tela.imprimirTabuleiro(partida.tab);
+                Tela.imprimirPartida(partida);
             } catch (TabuleiroException e) {
                 Console.WriteLine(e.Message);
 

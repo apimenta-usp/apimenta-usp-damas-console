@@ -9,16 +9,6 @@ namespace damas {
             return "C";
         }
 
-        private bool existeInimigo(Posicao pos) {
-            Peca p = tab.peca(pos);
-            return p != null && p.cor != cor;
-        }
-
-        private bool casaLivre(Posicao pos) {
-            Peca p = tab.peca(pos);
-            return p == null;
-        }
-
         //private bool podeCapturar(Posicao pos) {
         //    Peca p1 = tab.peca(pos);
         //}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using tabuleiro;
 
 namespace damas {
@@ -27,8 +28,8 @@ namespace damas {
         public Peca executarMovimento(Posicao origem, Posicao destino) {
             Peca p = tab.retirarPeca(origem);
             p.incrementarQteMovimentos();
-            Peca pecaCapturada = tab.retirarPeca(destino);
             tab.colocarPeca(p, destino);
+            Peca pecaCapturada = capturarPeca(origem, destino);
             if (pecaCapturada != null) {
                 capturadas.Add(pecaCapturada);
             }
@@ -37,13 +38,83 @@ namespace damas {
         }
 
         public void realizarJogada(Posicao origem, Posicao destino) {
-            executarMovimento(origem, destino);
-            //Peca pecaCapturada = executarMovimento(origem, destino);
+            //executarMovimento(origem, destino);
+            Peca pecaCapturada = executarMovimento(origem, destino);
 
-            Peca p = tab.peca(destino);
+            //Peca p = tab.peca(destino);
 
             turno++;
             mudarJogador();
+        }
+
+        private bool existeAdversario(Posicao pos) {
+            Peca p = tab.peca(pos);
+            return p != null && p.cor != jogadorAtual;
+        }
+        
+        private Peca capturarPeca(Posicao origem, Posicao destino) {
+            int diferencaLinha = destino.linha - origem.linha;
+            int diferencaColuna = destino.coluna - origem.coluna;
+            Posicao pos = new Posicao(0, 0);
+
+            if (diferencaLinha == 0 || Math.Abs(diferencaLinha) == 1 ||
+                diferencaColuna == 0 || Math.Abs(diferencaColuna) == 1) {
+                return null;
+            }
+
+            if (diferencaLinha < -1 && diferencaColuna > 1) {
+                for (int i = 1; i < Math.Abs(diferencaLinha); i++) {
+                    pos.definirValores(origem.linha - i, origem.coluna + i);
+                    Peca aux = tab.peca(pos);
+
+                    if (tab.posicaoValida(pos) && existeAdversario(pos)) {
+                        aux.posicao = null;
+                        tab.pecas[pos.linha, pos.coluna] = null;
+                        return aux;
+                    }
+                }
+            }
+
+            if (diferencaLinha > 1 && diferencaColuna < -1) {
+                for (int i = 1; i < Math.Abs(diferencaLinha); i++) {
+                    pos.definirValores(origem.linha + i, origem.coluna - i);
+                    Peca aux = tab.peca(pos);
+
+                    if (tab.posicaoValida(pos) && existeAdversario(pos)) {
+                        aux.posicao = null;
+                        tab.pecas[pos.linha, pos.coluna] = null;
+                        return aux;
+                    }
+                }
+            }
+
+            if (diferencaLinha > 1 && diferencaColuna > 1) {
+                for (int i = 1; i < Math.Abs(diferencaLinha); i++) {
+                    pos.definirValores(origem.linha + i, origem.coluna + i);
+                    Peca aux = tab.peca(pos);
+
+                    if (tab.posicaoValida(pos) && existeAdversario(pos)) {
+                        aux.posicao = null;
+                        tab.pecas[pos.linha, pos.coluna] = null;
+                        return aux;
+                    }
+                }
+            }
+
+            if (diferencaLinha < -1 && diferencaColuna < -1) {
+                for (int i = 1; i < Math.Abs(diferencaLinha); i++) {
+                    pos.definirValores(origem.linha - i, origem.coluna - i);
+                    Peca aux = tab.peca(pos);
+
+                    if (tab.posicaoValida(pos) && existeAdversario(pos)) {
+                        aux.posicao = null;
+                        tab.pecas[pos.linha, pos.coluna] = null;
+                        return aux;
+                    }
+                }
+            }
+
+            return null;
         }
 
         public void validarPosicaoDeOrigem(Posicao pos) {
