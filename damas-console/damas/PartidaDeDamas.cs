@@ -59,7 +59,20 @@ namespace damas {
             } else promocaoComum = false;
 
             HashSet<Peca> pecasAdversarias = pecasEmJogo(corAdversaria(jogadorAtual));
+            bool jogadaPossivel = false;
+
+            if (pecasAdversarias.Count > 0) {
+                foreach (Peca x in pecasAdversarias) {
+                    if (x.existemMovimentosPossiveis()) {
+                        jogadaPossivel = true;
+                        break;
+                    }
+                }
+            }
+
             if (pecasAdversarias.Count == 0) {
+                terminada = true;
+            } else if (!jogadaPossivel) {
                 terminada = true;
             } else {
                 turno++;
@@ -76,7 +89,8 @@ namespace damas {
             int diferencaLinha = destino.linha - origem.linha;
             int diferencaColuna = destino.coluna - origem.coluna;
             if (Math.Abs(diferencaLinha) != Math.Abs(diferencaColuna)) {
-                return null;
+                throw new TabuleiroException("Ocorreu um erro inesperado! " +
+                    "\nO número de linhas e o de colunas do tabuleiro devem ser iguais.");
             }
 
             if (diferencaLinha == 0 || Math.Abs(diferencaLinha) == 1 ||
@@ -188,7 +202,7 @@ namespace damas {
             return aux;
         }
 
-        private Cor corAdversaria(Cor cor) {
+        public Cor corAdversaria(Cor cor) {
             if (cor == Cor.Branca) {
                 return Cor.Preta;
             } else {

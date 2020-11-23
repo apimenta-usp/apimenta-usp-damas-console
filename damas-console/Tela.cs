@@ -72,6 +72,11 @@ namespace damas_console {
                     Console.WriteLine(partida.jogadorAtual);
                 }
             } else {
+                HashSet<Peca> pecasAdversarias = partida.pecasEmJogo(partida.corAdversaria(partida.jogadorAtual));
+                if (pecasAdversarias.Count > 0) {
+                    Console.Write("\nNão há movimentos possíveis para as peças ");
+                    Console.WriteLine(partida.corAdversaria(partida.jogadorAtual).ToString().ToLower() + "s.");
+                }
                 Console.WriteLine("\nFIM DA PARTIDA!");
                 Console.Write("Vencedor: ");
                 if (partida.jogadorAtual == Cor.Preta) {
