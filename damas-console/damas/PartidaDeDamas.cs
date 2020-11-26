@@ -155,6 +155,42 @@ namespace damas {
             return null;
         }
 
+        public bool[,] pecasParaMovimento() {
+            HashSet<Peca> aux = pecasEmJogo(jogadorAtual);
+            bool[,] mat = new bool[tab.linhas, tab.colunas];
+
+            foreach (Peca x in aux) {
+                if (x.existemMovimentosPossiveis()) {
+                    mat[x.posicao.linha, x.posicao.coluna] = true;
+                }
+            }
+
+            return mat;
+        }
+
+        public bool[,] pecasParaCaptura() {
+            HashSet<Peca> aux = pecasEmJogo(jogadorAtual);
+            bool[,] mat = new bool[tab.linhas, tab.colunas];
+
+            foreach (Peca x in aux) {
+                if (x.existemCapturasPossiveis()) {
+                    mat[x.posicao.linha, x.posicao.coluna] = true;
+                }
+            }
+
+            return mat;
+        }
+
+        public bool possibilidadeCaptura() {
+            HashSet<Peca> pecasAtuais = pecasEmJogo(jogadorAtual);
+            foreach (Peca x in pecasAtuais) {
+                if (x.existemCapturasPossiveis()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void validarPosicaoDeOrigem(Posicao pos) {
             if (tab.peca(pos) == null) {
                 throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
@@ -162,14 +198,26 @@ namespace damas {
             if (jogadorAtual != tab.peca(pos).cor) {
                 throw new TabuleiroException("A peça de origem escolhida não é sua!");
             }
-            if (!tab.peca(pos).existemMovimentosPossiveis()) {
-                throw new TabuleiroException("Não há movimentos possíveis para a peça de origem escolhida!");
+            if (possibilidadeCaptura()) {
+                if (!tab.peca(pos).existemCapturasPossiveis()) {
+                    throw new TabuleiroException("A captura de peças é obrigatória.");
+                }
+            } else {
+                if (!tab.peca(pos).existemMovimentosPossiveis()) {
+                    throw new TabuleiroException("Não há movimentos possíveis para a peça de origem escolhida.");
+                }
             }
         }
 
         public void validarPosicaoDeDestino(Posicao origem, Posicao destino) {
-            if (!tab.peca(origem).movimentoPossivel(destino)) {
-                throw new TabuleiroException("Posição de destino inválida!");
+            if (possibilidadeCaptura()) {
+                if (!tab.peca(origem).capturaPossivel(destino)) {
+                    throw new TabuleiroException("Posição de destino inválida.");
+                }
+            } else {
+                if (!tab.peca(origem).movimentoPossivel(destino)) {
+                    throw new TabuleiroException("Posição de destino inválida.");
+                }
             }
         }
 
@@ -232,9 +280,12 @@ namespace damas {
                     //tab.colocarPeca(new Dama(tab, Cor.Preta), new PosicaoDamas('d', 4).toPosicao());
 
                     colocarNovaPeca(new Dama(tab, Cor.Branca), 'd', 4);
+                    colocarNovaPeca(new Dama(tab, Cor.Branca), 'a', 5);
                     colocarNovaPeca(new Comum(tab, Cor.Branca), 'b', 2);
+                    colocarNovaPeca(new Comum(tab, Cor.Branca), 'a', 1);
                     colocarNovaPeca(new Comum(tab, Cor.Preta), 'b', 6);
                     colocarNovaPeca(new Comum(tab, Cor.Preta), 'c', 3);
+                    colocarNovaPeca(new Comum(tab, Cor.Preta), 'd', 2);
                     colocarNovaPeca(new Dama(tab, Cor.Preta), 'g', 1);
                     colocarNovaPeca(new Dama(tab, Cor.Preta), 'g', 7);
                     break;

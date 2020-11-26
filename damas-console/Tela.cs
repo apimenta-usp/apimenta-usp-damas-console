@@ -139,27 +139,85 @@ namespace damas_console {
             imprimirLetra(tab);
         }
 
-        public static void imprimirTabuleiro(Tabuleiro tab, bool[,] posicoesPossiveis) {
-
+        public static void imprimirTabuleiro(PartidaDeDamas partida, bool[,] pecasNoTabuleiro) {
+            
             ConsoleColor fundoOriginal = Console.BackgroundColor;
             ConsoleColor fundoAlterado = ConsoleColor.DarkGray;
 
-            for (int i = 0; i < tab.linhas; i++) {
-                imprimirNumero(tab, i);
-                for (int j = 0; j < tab.colunas; j++) {
-                    if (posicoesPossiveis[i, j]) {
+            for (int i = 0; i < partida.tab.linhas; i++) {
+                imprimirNumero(partida.tab, i);
+                for (int j = 0; j < partida.tab.colunas; j++) {
+                    if (pecasNoTabuleiro[i, j]) {
                         Console.BackgroundColor = fundoAlterado;
                     } else {
                         Console.BackgroundColor = fundoOriginal;
                     }
-                    imprimirPeca(tab.peca(i, j), i, j);
+                    imprimirPeca(partida.tab.peca(i, j), i, j);
                     Console.BackgroundColor = fundoOriginal;
                 }
                 Console.WriteLine();
                 Console.BackgroundColor = fundoOriginal;
             }
-            imprimirLetra(tab);
+            imprimirLetra(partida.tab);
+            Console.WriteLine();
+
+            imprimirPecasCapturadas(partida);
+            if (partida.promocaoComum) {
+                Console.WriteLine("\nPeça promovida a Dama!");
+            }
+            Console.WriteLine();
+            Console.WriteLine("Turno: " + partida.turno);
+            if (!partida.terminada) {
+                Console.Write("Aguardando jogada: ");
+                if (partida.jogadorAtual == Cor.Preta) {
+                    ConsoleColor corPadrao = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(partida.jogadorAtual);
+                    Console.ForegroundColor = corPadrao;
+                } else {
+                    Console.WriteLine(partida.jogadorAtual);
+                }
+            } else {
+                HashSet<Peca> pecasAdversarias = partida.pecasEmJogo(partida.corAdversaria(partida.jogadorAtual));
+                if (pecasAdversarias.Count > 0) {
+                    Console.Write("\nNão há movimentos possíveis para as peças ");
+                    Console.WriteLine(partida.corAdversaria(partida.jogadorAtual).ToString().ToLower() + "s.");
+                }
+                Console.WriteLine("\nFIM DA PARTIDA!");
+                Console.Write("Vencedor: ");
+                if (partida.jogadorAtual == Cor.Preta) {
+                    ConsoleColor corPadrao = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(partida.jogadorAtual);
+                    Console.ForegroundColor = corPadrao;
+                } else {
+                    Console.WriteLine(partida.jogadorAtual);
+                }
+                Console.WriteLine();
+            }
         }
+
+        //public static void imprimirTabuleiro(Tabuleiro tab, bool[,] posicoesPossiveis) {
+
+        //    ConsoleColor fundoOriginal = Console.BackgroundColor;
+        //    ConsoleColor fundoAlterado = ConsoleColor.DarkGray;
+
+        //    for (int i = 0; i < tab.linhas; i++) {
+        //        imprimirNumero(tab, i);
+        //        for (int j = 0; j < tab.colunas; j++) {
+        //            if (posicoesPossiveis[i, j]) {
+        //                Console.BackgroundColor = fundoAlterado;
+        //            } else {
+        //                Console.BackgroundColor = fundoOriginal;
+        //            }
+        //            imprimirPeca(tab.peca(i, j), i, j);
+        //            Console.BackgroundColor = fundoOriginal;
+        //        }
+        //        Console.WriteLine();
+        //        Console.BackgroundColor = fundoOriginal;
+        //    }
+        //    imprimirLetra(tab);
+        //}
 
         private static bool validarLinha(Tabuleiro tab, int linha) {
             for (int i = 1; i <= tab.linhas; i++) {

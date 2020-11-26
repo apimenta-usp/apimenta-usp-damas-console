@@ -30,6 +30,18 @@ namespace tabuleiro {
             return false;
         }
 
+        public bool existemCapturasPossiveis() {
+            bool[,] mat = capturasPossiveis();
+            for (int i = 0; i < tab.linhas; i++) {
+                for (int j = 0; j < tab.colunas; j++) {
+                    if (mat[i, j]) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         protected bool existeInimigo(Posicao pos) {
             Peca p = tab.peca(pos);
             return p != null && p.cor != cor;
@@ -44,6 +56,12 @@ namespace tabuleiro {
             return movimentosPossiveis()[pos.linha, pos.coluna];
         }
 
+        public bool capturaPossivel(Posicao pos) {
+            return capturasPossiveis()[pos.linha, pos.coluna];
+        }
+
         public abstract bool[,] movimentosPossiveis();
+
+        public abstract bool[,] capturasPossiveis();
     }
 }

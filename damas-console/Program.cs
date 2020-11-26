@@ -24,17 +24,30 @@ namespace damas_console {
 
                     try {
                         Console.Clear();
-                        Tela.imprimirPartida(partida);
+                        //Tela.imprimirPartida(partida);
+
+                        bool[,] pecasNoTabuleiro;
+                        if (partida.possibilidadeCaptura()) {
+                            pecasNoTabuleiro = partida.pecasParaCaptura();
+                        } else {
+                            pecasNoTabuleiro = partida.pecasParaMovimento();
+                        }
+                        Tela.imprimirTabuleiro(partida, pecasNoTabuleiro);
 
                         Console.WriteLine();
                         Console.Write("Origem: ");
                         Posicao origem = Tela.lerPosicaoDamas(partida.tab).toPosicao();
                         partida.validarPosicaoDeOrigem(origem);
 
-                        bool[,] posicoesPossiveis = partida.tab.peca(origem).movimentosPossiveis();
+                        if (partida.possibilidadeCaptura()) {
+                            pecasNoTabuleiro = partida.tab.peca(origem).capturasPossiveis();
+                        } else {
+                            pecasNoTabuleiro = partida.tab.peca(origem).movimentosPossiveis();
+                        }
 
                         Console.Clear();
-                        Tela.imprimirTabuleiro(partida.tab, posicoesPossiveis);
+                        Tela.imprimirTabuleiro(partida, pecasNoTabuleiro);
+                        //Tela.imprimirTabuleiro(partida.tab, posicoesPossiveis);
 
                         Console.WriteLine();
                         Console.Write("Destino: ");

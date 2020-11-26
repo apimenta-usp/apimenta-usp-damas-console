@@ -8,10 +8,6 @@ namespace damas {
         public override string ToString() {
             return "D";
         }
-        
-        //private bool podeCapturar(Posicao pos) {
-        //    Peca p1 = tab.peca(pos);
-        //}
 
         public override bool[,] movimentosPossiveis() {
             bool[,] mat = new bool[tab.linhas, tab.colunas];
@@ -26,6 +22,38 @@ namespace damas {
                 pos.coluna++;
             }
 
+            // Testando casas sudeste livres
+            pos.definirValores(posicao.linha + 1, posicao.coluna + 1);
+            while (tab.posicaoValida(pos) && casaLivre(pos)) {
+                mat[pos.linha, pos.coluna] = true;
+                pos.linha++;
+                pos.coluna++;
+            }
+
+            // Testando casas sudoeste livres
+            pos.definirValores(posicao.linha + 1, posicao.coluna - 1);
+            while (tab.posicaoValida(pos) && casaLivre(pos)) {
+                mat[pos.linha, pos.coluna] = true;
+                pos.linha++;
+                pos.coluna--;
+            }
+
+            // Testando casas noroeste livres
+            pos.definirValores(posicao.linha - 1, posicao.coluna - 1);
+            while (tab.posicaoValida(pos) && casaLivre(pos)) {
+                mat[pos.linha, pos.coluna] = true;
+                pos.linha--;
+                pos.coluna--;
+            }
+
+            return mat;
+        }
+
+        public override bool[,] capturasPossiveis() {
+            bool[,] mat = new bool[tab.linhas, tab.colunas];
+
+            Posicao pos = new Posicao(0, 0);
+
             // Testando casas nordeste após peça adversária
             for (int i = 1; i <= tab.linhas; i++) {
                 pos.definirValores(posicao.linha - i, posicao.coluna + i);
@@ -38,14 +66,6 @@ namespace damas {
                     }
                     break;
                 }
-            }
-
-            // Testando casas sudeste livres
-            pos.definirValores(posicao.linha + 1, posicao.coluna + 1);
-            while (tab.posicaoValida(pos) && casaLivre(pos)) {
-                mat[pos.linha, pos.coluna] = true;
-                pos.linha++;
-                pos.coluna++;
             }
 
             // Testando casas sudeste após peça adversária
@@ -62,14 +82,6 @@ namespace damas {
                 }
             }
 
-            // Testando casas sudoeste livres
-            pos.definirValores(posicao.linha + 1, posicao.coluna - 1);
-            while (tab.posicaoValida(pos) && casaLivre(pos)) {
-                mat[pos.linha, pos.coluna] = true;
-                pos.linha++;
-                pos.coluna--;
-            }
-
             // Testando casas sudoeste após peça adversária
             for (int i = 1; i <= tab.linhas; i++) {
                 pos.definirValores(posicao.linha + i, posicao.coluna - i);
@@ -82,14 +94,6 @@ namespace damas {
                     }
                     break;
                 }
-            }
-
-            // Testando casas noroeste livres
-            pos.definirValores(posicao.linha - 1, posicao.coluna - 1);
-            while (tab.posicaoValida(pos) && casaLivre(pos)) {
-                mat[pos.linha, pos.coluna] = true;
-                pos.linha--;
-                pos.coluna--;
             }
 
             // Testando casas noroeste após peça adversária
