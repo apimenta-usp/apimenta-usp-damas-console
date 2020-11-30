@@ -57,6 +57,9 @@ namespace damas {
             // Testando casas nordeste após peça adversária
             for (int i = 1; i <= tab.linhas; i++) {
                 pos.definirValores(posicao.linha - i, posicao.coluna + i);
+                if (tab.posicaoValida(pos) && existeAmigo(pos)) {
+                    break;
+                }
                 if (tab.posicaoValida(pos) && existeInimigo(pos)) {
                     pos.definirValores(posicao.linha - (i + 1), posicao.coluna + (i + 1));
                     while (tab.posicaoValida(pos) && casaLivre(pos)) {
@@ -71,6 +74,9 @@ namespace damas {
             // Testando casas sudeste após peça adversária
             for (int i = 1; i <= tab.linhas; i++) {
                 pos.definirValores(posicao.linha + i, posicao.coluna + i);
+                if (tab.posicaoValida(pos) && existeAmigo(pos)) {
+                    break;
+                }
                 if (tab.posicaoValida(pos) && existeInimigo(pos)) {
                     pos.definirValores(posicao.linha + (i + 1), posicao.coluna + (i + 1));
                     while (tab.posicaoValida(pos) && casaLivre(pos)) {
@@ -85,6 +91,9 @@ namespace damas {
             // Testando casas sudoeste após peça adversária
             for (int i = 1; i <= tab.linhas; i++) {
                 pos.definirValores(posicao.linha + i, posicao.coluna - i);
+                if (tab.posicaoValida(pos) && existeAmigo(pos)) {
+                    break;
+                }
                 if (tab.posicaoValida(pos) && existeInimigo(pos)) {
                     pos.definirValores(posicao.linha + (i + 1), posicao.coluna - (i + 1));
                     while (tab.posicaoValida(pos) && casaLivre(pos)) {
@@ -99,6 +108,9 @@ namespace damas {
             // Testando casas noroeste após peça adversária
             for (int i = 1; i <= tab.linhas; i++) {
                 pos.definirValores(posicao.linha - i, posicao.coluna - i);
+                if (tab.posicaoValida(pos) && existeAmigo(pos)) {
+                    break;
+                }
                 if (tab.posicaoValida(pos) && existeInimigo(pos)) {
                     pos.definirValores(posicao.linha - (i + 1), posicao.coluna - (i + 1));
                     while (tab.posicaoValida(pos) && casaLivre(pos)) {

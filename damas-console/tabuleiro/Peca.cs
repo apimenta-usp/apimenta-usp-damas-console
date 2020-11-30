@@ -42,6 +42,11 @@ namespace tabuleiro {
             return false;
         }
 
+        protected bool existeAmigo(Posicao pos) {
+            Peca p = tab.peca(pos);
+            return p != null && p.cor == cor;
+        }
+
         protected bool existeInimigo(Posicao pos) {
             Peca p = tab.peca(pos);
             return p != null && p.cor != cor;
