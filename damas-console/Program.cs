@@ -24,7 +24,6 @@ namespace damas_console {
 
                     try {
                         Console.Clear();
-                        //Tela.imprimirPartida(partida);
 
                         bool[,] pecasNoTabuleiro;
                         if (partida.possibilidadeCaptura()) {
@@ -45,9 +44,11 @@ namespace damas_console {
                             pecasNoTabuleiro = partida.tab.peca(origem).movimentosPossiveis();
                         }
 
+                        Peca capturando;
+                        SentidoDoMovimento movimentacao;
+
                         Console.Clear();
                         Tela.imprimirTabuleiro(partida, pecasNoTabuleiro);
-                        //Tela.imprimirTabuleiro(partida.tab, posicoesPossiveis);
 
                         Console.WriteLine();
                         Console.Write("Destino: ");
@@ -55,6 +56,47 @@ namespace damas_console {
                         partida.validarPosicaoDeDestino(origem, destino);
 
                         partida.realizarJogada(origem, destino);
+
+                        capturando = partida.tab.peca(destino);
+                        movimentacao = partida.deslocamento;
+
+                        if (partida.houveCaptura && !partida.promocaoComum) {
+                            if (partida.possibilidadeCaptura(capturando, movimentacao)) {
+                                pecasNoTabuleiro = partida.tab.peca(destino).capturasPossiveis(movimentacao);
+                                origem = destino;
+                                partida.turno--;
+                                partida.mudarJogador();
+                            }
+
+                            while (partida.possibilidadeCaptura(capturando, movimentacao)) {
+                                try {
+                                    Console.Clear();
+                                    Tela.imprimirTabuleiro(partida, pecasNoTabuleiro);
+
+                                    Console.WriteLine();
+                                    Console.Write("Destino: ");
+                                    destino = Tela.lerPosicaoDamas(partida.tab).toPosicao();
+                                    partida.validarPosicaoDeDestino(origem, destino, movimentacao);
+
+                                    partida.realizarJogada(origem, destino);
+
+                                    capturando = partida.tab.peca(destino);
+                                    movimentacao = partida.deslocamento;
+
+                                    if (partida.houveCaptura) {
+                                        if (partida.possibilidadeCaptura(capturando, movimentacao)) {
+                                            pecasNoTabuleiro = partida.tab.peca(destino).capturasPossiveis(movimentacao);
+                                            origem = destino;
+                                            partida.turno--;
+                                            partida.mudarJogador();
+                                        }
+                                    }
+                                } catch (TabuleiroException e) {
+                                    Console.WriteLine(e.Message);
+                                    Console.ReadKey(true);
+                                }
+                            }
+                        }
                     } catch (TabuleiroException e) {
                         Console.WriteLine(e.Message);
                         Console.ReadKey(true);

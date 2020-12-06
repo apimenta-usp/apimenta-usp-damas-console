@@ -5,11 +5,13 @@ using tabuleiro;
 namespace damas {
     class PartidaDeDamas {
         public Tabuleiro tab { get; private set; }
-        public int turno { get; private set; }
+        public int turno { get; set; }
         public Cor jogadorAtual { get; private set; }
         public bool terminada { get; private set; }
         private HashSet<Peca> pecas;
         private HashSet<Peca> capturadas;
+        public SentidoDoMovimento deslocamento { get; private set; }
+        public bool houveCaptura { get; private set; }
         public bool promocaoComum { get; private set; }
         //public int tamanho { get; private set; }
 
@@ -21,6 +23,8 @@ namespace damas {
             turno = 1;
             jogadorAtual = Cor.Branca;
             terminada = false;
+            deslocamento = SentidoDoMovimento.Nulo;
+            houveCaptura = false;
             promocaoComum = false;
             pecas = new HashSet<Peca>();
             capturadas = new HashSet<Peca>();
@@ -31,8 +35,8 @@ namespace damas {
         public Peca executarMovimento(Posicao origem, Posicao destino) {
             Peca p = tab.retirarPeca(origem);
             p.incrementarQteMovimentos();
-            tab.colocarPeca(p, destino);
             Peca pecaCapturada = capturarPeca(origem, destino);
+            tab.colocarPeca(p, destino);
             if (pecaCapturada != null) {
                 capturadas.Add(pecaCapturada);
             }
@@ -41,13 +45,16 @@ namespace damas {
         }
 
         public void realizarJogada(Posicao origem, Posicao destino) {
-            //executarMovimento(origem, destino);
             Peca pecaCapturada = executarMovimento(origem, destino);
+
+            if (pecaCapturada != null) {
+                houveCaptura = true;
+            } else houveCaptura = false;
 
             Peca p = tab.peca(destino);
 
             // #jogadaespecial promoção
-            if (p is Comum) {
+            if (p is Comum && (!houveCaptura || !p.existemCapturasPossiveis())) {
                 if (p.cor == Cor.Branca && destino.linha == 0 || p.cor == Cor.Preta && destino.linha == (tab.linhas - 1)) {
                     p = tab.retirarPeca(destino);
                     pecas.Remove(p);
@@ -63,7 +70,7 @@ namespace damas {
 
             if (pecasAdversarias.Count > 0) {
                 foreach (Peca x in pecasAdversarias) {
-                    if (x.existemMovimentosPossiveis()) {
+                    if (x.existemCapturasPossiveis() || x.existemMovimentosPossiveis()) {
                         jogadaPossivel = true;
                         break;
                     }
@@ -85,7 +92,7 @@ namespace damas {
             return p != null && p.cor != jogadorAtual;
         }
 
-        private Peca capturarPeca(Posicao origem, Posicao destino) {
+        public Peca capturarPeca(Posicao origem, Posicao destino) {
             int diferencaLinha = destino.linha - origem.linha;
             int diferencaColuna = destino.coluna - origem.coluna;
             if (Math.Abs(diferencaLinha) != Math.Abs(diferencaColuna)) {
@@ -100,6 +107,7 @@ namespace damas {
 
             Posicao pos = new Posicao(0, 0);
 
+            // Testando casas nordeste para captura
             if (diferencaLinha < -1 && diferencaColuna > 1) {
                 for (int i = 1; i < Math.Abs(diferencaLinha); i++) {
                     pos.definirValores(origem.linha - i, origem.coluna + i);
@@ -108,11 +116,13 @@ namespace damas {
                     if (tab.posicaoValida(pos) && existeAdversario(pos)) {
                         aux.posicao = null;
                         tab.pecas[pos.linha, pos.coluna] = null;
+                        deslocamento = SentidoDoMovimento.Nordeste;
                         return aux;
-                    }
+                    } else deslocamento = SentidoDoMovimento.Nulo;
                 }
-            }
+            } else deslocamento = SentidoDoMovimento.Nulo;
 
+            // Testando casas sudoeste para captura
             if (diferencaLinha > 1 && diferencaColuna < -1) {
                 for (int i = 1; i < Math.Abs(diferencaLinha); i++) {
                     pos.definirValores(origem.linha + i, origem.coluna - i);
@@ -121,11 +131,13 @@ namespace damas {
                     if (tab.posicaoValida(pos) && existeAdversario(pos)) {
                         aux.posicao = null;
                         tab.pecas[pos.linha, pos.coluna] = null;
+                        deslocamento = SentidoDoMovimento.Sudoeste;
                         return aux;
-                    }
+                    } else deslocamento = SentidoDoMovimento.Nulo;
                 }
-            }
+            } else deslocamento = SentidoDoMovimento.Nulo;
 
+            // Testando casas sudeste para captura
             if (diferencaLinha > 1 && diferencaColuna > 1) {
                 for (int i = 1; i < Math.Abs(diferencaLinha); i++) {
                     pos.definirValores(origem.linha + i, origem.coluna + i);
@@ -134,11 +146,13 @@ namespace damas {
                     if (tab.posicaoValida(pos) && existeAdversario(pos)) {
                         aux.posicao = null;
                         tab.pecas[pos.linha, pos.coluna] = null;
+                        deslocamento = SentidoDoMovimento.Sudeste;
                         return aux;
-                    }
+                    } else deslocamento = SentidoDoMovimento.Nulo;
                 }
-            }
+            } else deslocamento = SentidoDoMovimento.Nulo;
 
+            // Testando casas noroeste para captura
             if (diferencaLinha < -1 && diferencaColuna < -1) {
                 for (int i = 1; i < Math.Abs(diferencaLinha); i++) {
                     pos.definirValores(origem.linha - i, origem.coluna - i);
@@ -147,10 +161,11 @@ namespace damas {
                     if (tab.posicaoValida(pos) && existeAdversario(pos)) {
                         aux.posicao = null;
                         tab.pecas[pos.linha, pos.coluna] = null;
+                        deslocamento = SentidoDoMovimento.Noroeste;
                         return aux;
-                    }
+                    } else deslocamento = SentidoDoMovimento.Nulo;
                 }
-            }
+            } else deslocamento = SentidoDoMovimento.Nulo;
 
             return null;
         }
@@ -191,6 +206,13 @@ namespace damas {
             return false;
         }
 
+        public bool possibilidadeCaptura(Peca capturando, SentidoDoMovimento movimentacao) {
+            if (capturando.existemCapturasPossiveis(movimentacao)) {
+                return true;
+            }
+            return false;
+        }
+
         public void validarPosicaoDeOrigem(Posicao pos) {
             if (tab.peca(pos) == null) {
                 throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
@@ -221,7 +243,19 @@ namespace damas {
             }
         }
 
-        private void mudarJogador() {
+        public void validarPosicaoDeDestino(Posicao origem, Posicao destino, SentidoDoMovimento movimentacao) {
+            if (possibilidadeCaptura()) {
+                if (!tab.peca(origem).capturaPossivel(destino) || !tab.peca(origem).capturaPossivel(destino, movimentacao)) {
+                    throw new TabuleiroException("Posição de destino inválida.");
+                }
+            } else {
+                if (!tab.peca(origem).movimentoPossivel(destino)) {
+                    throw new TabuleiroException("Posição de destino inválida.");
+                }
+            }
+        }
+
+        public void mudarJogador() {
             if (jogadorAtual == Cor.Branca) {
                 jogadorAtual = Cor.Preta;
             } else {
@@ -281,13 +315,17 @@ namespace damas {
 
                     colocarNovaPeca(new Dama(tab, Cor.Branca), 'd', 4);
                     colocarNovaPeca(new Dama(tab, Cor.Branca), 'a', 5);
-                    colocarNovaPeca(new Comum(tab, Cor.Branca), 'b', 2);
-                    colocarNovaPeca(new Comum(tab, Cor.Branca), 'a', 1);
+                    colocarNovaPeca(new Comum(tab, Cor.Preta), 'g', 7);
+                    //colocarNovaPeca(new Comum(tab, Cor.Branca), 'h', 6);
+                    //colocarNovaPeca(new Comum(tab, Cor.Branca), 'a', 1);
                     colocarNovaPeca(new Comum(tab, Cor.Preta), 'b', 6);
-                    colocarNovaPeca(new Comum(tab, Cor.Preta), 'c', 3);
+                    //colocarNovaPeca(new Comum(tab, Cor.Preta), 'd', 6);
+                    //colocarNovaPeca(new Comum(tab, Cor.Preta), 'e', 7);
+                    colocarNovaPeca(new Comum(tab, Cor.Preta), 'b', 2);
                     colocarNovaPeca(new Comum(tab, Cor.Preta), 'd', 2);
-                    colocarNovaPeca(new Dama(tab, Cor.Preta), 'g', 1);
-                    colocarNovaPeca(new Dama(tab, Cor.Preta), 'g', 7);
+                    colocarNovaPeca(new Dama(tab, Cor.Preta), 'f', 2);
+                    colocarNovaPeca(new Dama(tab, Cor.Preta), 'e', 5);
+                    //colocarNovaPeca(new Dama(tab, Cor.Preta), 'g', 7);
                     break;
                 case 10:
                     //tab.colocarPeca(new Dama(tab, Cor.Branca), new PosicaoDamas('e', 5).toPosicao());
